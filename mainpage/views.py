@@ -4,7 +4,7 @@ from django.shortcuts import render
 from .forms import IndexForm
 from django.http import HttpResponseRedirect
 from django.http import JsonResponse
-from .VSBLogic import get_class_JSON
+from .VSBLogic import get_class_JSON,get_date,formated
 
 # Create your views here.
 def index(request):
@@ -34,6 +34,10 @@ def blue(request):
 
 
 def json(request):
-    code = get_class_JSON("","")
+    code = formated("","")
     print(code)
-    return JsonResponse(code)
+    return HttpResponse(code)
+
+
+def date_test(request):
+    return JsonResponse(get_date())

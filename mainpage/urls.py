@@ -3,7 +3,8 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('/blue', views.index, name='blue'),
+    path('/blue', views.blue, name='blue'),
     path('', views.index, name='index'),
-    path('JSON', views.index, name='json'),
+    path('JSON', views.json, name='json'),
+    path('date', views.date_test, name='date')
 ]
