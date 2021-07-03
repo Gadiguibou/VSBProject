@@ -30,7 +30,7 @@ def index(request):
 
 
 def blue(request):
-    return HttpResponse("Hello, world, text 0v0 if you can see this blue.")
+    return HttpResponse("Hello, world, text 0v0 if you can see this blue. Hope you had a productive day")
 
 
 def json(request):
