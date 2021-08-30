@@ -16,8 +16,9 @@ from mainpage.models import Users, CRN
 
 
 class selectedclass:
-    def __init__(self, name, discription, courseCode):
+    def __init__(self, name, discription, courseCode,term):
         self.name = name
+        self.term = term
         self.discription = discription
         self.courseCode = courseCode
         self.added_CRNs = []
@@ -39,7 +40,7 @@ class selectedclass:
 
     def to_dict(self):
         return {"name": self.name, "discription": self.discription, "courseCode": self.courseCode,
-                "timeblocks": self.array_blocks}
+                "timeblocks": self.array_blocks, "term" : self.term}
 
 
 def get_date():
@@ -74,7 +75,7 @@ def get_class(class_name, term):
             raise ArithmeticError
 
         valuefind = myroot.find(".//course").attrib
-        xClass = selectedclass(valuefind["title"], valuefind["desc"], valuefind["key"])
+        xClass = selectedclass(valuefind["title"], valuefind["desc"], valuefind["key"], str(term))
 
         for x in myroot.findall(".//timeblock"):
             x = x.attrib

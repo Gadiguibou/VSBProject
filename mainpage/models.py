@@ -6,9 +6,9 @@ from django.core.validators import RegexValidator
 # Create your models here.
 
 class CRN(models.Model):
-    CRN = models.IntegerField(primary_key=True)
-    class_name = models.CharField(max_length=20)
-    term = models.CharField(max_length=10)
+    CRN = models.IntegerField(primary_key=True,null=False)
+    class_name = models.CharField(max_length=20,null=True)
+    term = models.CharField(max_length=10, null=True)
 
     def __str__(self):
         return str(self.CRN)

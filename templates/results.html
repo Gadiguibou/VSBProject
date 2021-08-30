@@ -4,7 +4,7 @@
 {% extends "base_template.html" %}
 
 {% block content %}
-<form id="submit_form" action="/class/{{ courseCode }}" method="post">{% csrf_token %}
+<form id="submit_form" action="/class/{{ term }}/{{ courseCode }}" method="post">{% csrf_token %}
 
 
 
@@ -52,7 +52,7 @@
     <div>
 
         <label for="phone">Phone:</label>
-        <input id="phone" type="tel">
+        <input id="phone" type="tel" name="phone">
         <span id="valid-msg" class="hide">✓ Valid</span>
         <span id="error-msg" class="hide"></span>
 

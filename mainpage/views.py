@@ -48,16 +48,14 @@ def index(request):
     return render(request, 'index.html', {'form': form})
 
 
-
-
 def classfinder(request, class_name, term):
     try:
-
         if request.method == "POST":
             CRN_Array = []
             email = request.POST.get("email", "")
-            tel = request.POST.get("telphone")
-
+            tel = request.POST.get("phone", "")
+            print("this is tel")
+            print(tel)
             if not Users.objects.filter(email=email).exists():
                 if tel != "":
                     tel = tel.replace(" ", "")
@@ -67,19 +65,23 @@ def classfinder(request, class_name, term):
                     print(tel)
 
                     current_user = Users(email=email, phone_number=tel)
-                    try:
-                        current_user.full_clean()
-                        current_user.save()
-                    except ValidationError as e:
-                        print(e)
-                        return redirect("404")
-            else:
-                current_user = Users.objects.get(email=email)
 
+                else:
+                    current_user = Users(email=email)
+
+                try:
+                    current_user.full_clean()
+                    current_user.save()
+                except ValidationError as e:
+                    print(e)
+                    return redirect("404")
+
+            current_user = Users.objects.get(email=email)
             for key in request.POST:
+                print(key)
                 if key == "email":
                     continue
-                if key == "telphone":
+                if key == "phone":
                     continue
                 if key == "csrfmiddlewaretoken":
                     continue
@@ -87,15 +89,17 @@ def classfinder(request, class_name, term):
                 key = int(key)
 
                 if CRN.objects.filter(CRN=key, term=term, class_name=class_name).exists():
+
                     current_user.crn.add(CRN.objects.get(CRN=key, term=term, class_name=class_name))
+                    current_user.full_clean()
+                    current_user.save()
                 else:
                     new_CRN = CRN(CRN=key, class_name=class_name, term=term)
                     new_CRN.full_clean()
                     new_CRN.save()
                     current_user.crn.add(new_CRN)
-
-            current_user.full_clean()
-            current_user.save()
+                    current_user.full_clean()
+                    current_user.save()
 
             return redirect("success")
 
@@ -103,7 +107,7 @@ def classfinder(request, class_name, term):
             try:
                 class_value = get_class(class_name, term).to_dict()
             except ArithmeticError as e:
-                return render(request, 'fail.html', {"class" : class_name, "term" : term  })
+                return render(request, 'fail.html', {"class": class_name, "term": term})
 
             return render(request, "results.html", class_value)
         # if request.method == 'POST':
@@ -114,18 +118,15 @@ def classfinder(request, class_name, term):
 
 
 def blue(request):
-    #    print(" -/- Users to follow -/- \n\n")
-    #    for x in Users.objects.all():
-    #        print(str(x))
-    #        print(str(x.phone_number))
-    #        print(list(x.crn.all()))
-    #
-    #    print("-/- CRN to follow -/-")
-    #
-    #   for x in CRN.objects.all():
-    #        print(str(x) + "\n")
+    print(" -/- Users to follow -/- \n\n")
+    for x in Users.objects.all():
+        print(str(x.email))
+        print(str(x.phone_number))
+        print(list(x.crn.all()))
+        print("-/- CRN to follow -/-")
 
-    Scanner()
+    for x in CRN.objects.all():
+        print(str(x) + "\n")
 
     return HttpResponse("Hello, world, text 0v0 if you can see this blue. Hope you had a productive day")
 
