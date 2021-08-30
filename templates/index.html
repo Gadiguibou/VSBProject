@@ -1,11 +1,12 @@
-<div>
-    <div> Better Minerva </div>
-    <div> Search </div>
-    <div> Donate </div>
-    <div> Contact </div>
-</div>
 
 
+
+
+
+
+{% extends "base_template.html" %}
+
+{% block content %}
 
 <form action="/" method="post">
     {% csrf_token %}
@@ -13,8 +14,8 @@
     <input type="submit" value="Submit">
 </form>
 
+{% endblock content %}
 
 
 
 
-<footer>Made with ❤️ by Abu bakar Daud.   </footer>

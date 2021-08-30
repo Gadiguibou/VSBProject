@@ -4,7 +4,7 @@ from . import views
 
 urlpatterns = [
     path('blue', views.blue, name='blue'),
+    path('class/<int:term>/<slug:class_name>', views.classfinder, name="classfinder"),
     path('', views.index, name='index'),
-    path('JSON', views.json, name='json'),
-    path('date', views.date_test, name='date')
+    path('success', views.success, name="success")
 ]

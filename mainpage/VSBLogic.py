@@ -1,8 +1,46 @@
-import requests
 import datetime
 import math
-import xmltodict
 import json
+import requests
+import xml.etree.ElementTree as ET
+import math
+import threading
+import os
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
+import time
+from mainpage.models import Users, CRN
+
+
+
+
+
+class selectedclass:
+    def __init__(self, name, discription, courseCode):
+        self.name = name
+        self.discription = discription
+        self.courseCode = courseCode
+        self.added_CRNs = []
+        self.array_blocks = []
+        self.dictory_time_code = {}
+
+    def add_time(self, code, time):
+        self.dictory_time_code[code] = time
+
+    def add_block(self, CRN, Professor, Waitlist, Notes, Classtime, Type, Sec, me, os, ws, wc):
+        if CRN not in self.added_CRNs:
+            self.added_CRNs.append(CRN)
+            arrayofKeys = []
+            for key in Classtime:
+                arrayofKeys.append(self.dictory_time_code.get(key, "NA"))
+            dict = {"CRN": CRN, "Professor": Professor, "Waitlist": Waitlist, "Notes": Notes, "Classtime": arrayofKeys,
+                    "Type": Type, "Sec": Sec, "me": me, "availableSeats": os, "avalibleWaitList": ws, "maxWaitlist": wc}
+            self.array_blocks.append(dict)
+
+    def to_dict(self):
+        return {"name": self.name, "discription": self.discription, "courseCode": self.courseCode,
+                "timeblocks": self.array_blocks}
+
 
 def get_date():
     # annoying function that needs to be entered for the time to be validated. Hopefully this does not change,
@@ -18,9 +56,8 @@ def get_date():
     return array[0] + updated_time + array[1] + e
 
 
-def get_class_JSON(class_name,term):
-    term = "202109"
-    class_name = "COMP-250"
+def get_class(class_name, term):
+    term = str(term)
     url_base = "https://vsb.mcgill.ca/vsb/getclassdata.jsp"
     url_term = "?term=" + term
     url_course = "&course_1_0=" + class_name
@@ -30,15 +67,121 @@ def get_class_JSON(class_name,term):
     print(final_url)
     r = requests.get(final_url)
     if r.status_code == 200:
-        d = xmltodict.parse(r.text)
-        json_object = json.dumps(d, indent = 4)
-        return json_object
+        print(r.text)
+        myroot = ET.fromstring(r.text)
+        if myroot.find(".//course") == None:
+            print("error done")
+            raise ArithmeticError
+
+        valuefind = myroot.find(".//course").attrib
+        xClass = selectedclass(valuefind["title"], valuefind["desc"], valuefind["key"])
+
+        for x in myroot.findall(".//timeblock"):
+            x = x.attrib
+            xClass.add_time(x["id"], attrib_to_date_string(x))
+
+        for x in myroot.findall(".//block"):
+            x = x.attrib
+            xClass.add_block(x["key"], x["teacher"], x["me"], "", x["timeblockids"].split(","), x["type"], x["secNo"],
+                             me=x["me"], os=x["os"], ws=x["ws"], wc=["wc"])
+
+        return xClass
     else:
         return "fail"
 
 
-def formated (class_name,term ):
-    JSON = json.loads(get_class_JSON(class_name,term))
-    r_string = " Class formate \n\n Name:" + "\n" + str(JSON["addcourse"]["classdata"]["course"]["@key"]) + "\n" + "des:" + str(JSON["addcourse"]["classdata"]["course"]["@desc"])
-    return r_string
+def attrib_to_date_string(attrib):
+    day = attrib_to_date(attrib["day"])
+    start = calcProperTime(attrib["t1"])
+    end = calcProperTime(attrib["t2"])
+    return day + " : " + start + " - " + end
 
+
+def calcProperTime(string):
+    number = int(string)
+    min = number % 60
+    hour = math.floor(number / 60)
+
+    if min < 10:
+        min = str(min)
+        min = "0" + min
+
+    if hour >= 12:
+        hour = hour - 12
+        hour = str(hour)
+        min = str(min)
+        return hour + ":" + min + " PM"
+    else:
+        hour = str(hour)
+        min = str(min)
+        return hour + ":" + min + " AM"
+
+
+def attrib_to_date(attrib_text):
+    switcher = {
+        "1": "Sunday",
+        "2": "Monday",
+        "3": "Tuesday",
+        "4": "Wednesday",
+        "5": "Thursday",
+        "6": "Friday",
+        "7": "Saturday",
+    }
+    return switcher.get(attrib_text, "NA")
+
+
+
+def Scanner():
+    while True:
+        time.sleep(5)
+        class_checked_array = []
+        for user in list(Users.objects.all()):
+            for crn in user.crn.all():
+                if (crn.class_name, crn.term) not in class_checked_array:
+                    class_checked_array.append((crn.class_name, crn.term))
+                    for block in get_class(crn.class_name, crn.term).to_dict().get("timeblocks"):
+                        if FoundCRN(waitListAvalible=block.get("ws"), waitListMax=block.get("wc"),
+                                    maxSeats=block.get("os")):
+                            mass_email_phone(crn)
+
+
+# todo need to add, no waitlist but full seats, or waitlist but no seats.
+
+def FoundCRN(maxSeats, waitListAvalible, waitListMax):
+    if waitListMax > 0:
+        if waitListAvalible > 0:
+            return True
+    else:
+        if maxSeats > 0:
+            return True
+        else:
+            return False
+
+
+def mass_email_phone(crn):
+    group_users = Users.objects.filter(crn=crn)
+    if group_users.exists():
+        group_list = list(group_users)
+        for user in group_list:
+            send_email(name=crn.class_name, crn=crn.CRN, address=user.email)
+    group_users.delete()
+
+
+def send_email(name, crn, address):
+    # loop through all of the possible classes,
+    # check if there is a waitlist avabile
+    # if there is a waitlist avalible send the email and clear the users
+    # once the users are cleared start again.
+    message = Mail(
+        from_email='abubakar.daud@mail.mcgill.ca',
+        to_emails=address,
+        subject='CLASS FOUND ALERT',
+        html_content='<strong>' + "Class:" + name + "with CRN:" + crn + "has waitlist space avaliable"  '</strong>')
+    try:
+        sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
+        response = sg.send(message)
+        print(response.status_code)
+        print(response.body)
+        print(response.headers)
+    except Exception as e:
+        print(e)
