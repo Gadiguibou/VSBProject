@@ -22,7 +22,12 @@
     <div>
         <p> CRN: {{ o.CRN }}</p>
         <p> Professor: {{  o.Professor }}</p>
-        <p>  WaitList : {{ o.Waitlist }} </p>
+        <div> Class info<div>
+            <p>  WaitList seats: {{ o.Waitlist }} </p>
+            <p> Available seats: {{ o.availableSeats }}</p>
+            <p> </p>
+
+        </div>
         <div>
             {% for q in o.Classtime  %}
                 <div>{{ q }}</div>

@@ -10,9 +10,10 @@ from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
 import time
 from mainpage.models import Users, CRN
-
-
-
+from background_task import background
+import colorama
+from colorama import Fore, Back,Style
+colorama.init(autoreset=True)
 
 
 class selectedclass:
@@ -84,7 +85,7 @@ def get_class(class_name, term):
         for x in myroot.findall(".//block"):
             x = x.attrib
             xClass.add_block(x["key"], x["teacher"], x["me"], "", x["timeblockids"].split(","), x["type"], x["secNo"],
-                             me=x["me"], os=x["os"], ws=x["ws"], wc=["wc"])
+                             me=x["me"], os=x["os"], ws=x["ws"], wc=x["wc"])
 
         return xClass
     else:
@@ -131,9 +132,11 @@ def attrib_to_date(attrib_text):
     return switcher.get(attrib_text, "NA")
 
 
-
+@background(schedule=5)
 def Scanner():
+    print("Scanner Running")
     while True:
+        print("Loop check Scanner")
         time.sleep(5)
         class_checked_array = []
         for user in list(Users.objects.all()):
@@ -141,19 +144,27 @@ def Scanner():
                 if (crn.class_name, crn.term) not in class_checked_array:
                     class_checked_array.append((crn.class_name, crn.term))
                     for block in get_class(crn.class_name, crn.term).to_dict().get("timeblocks"):
-                        if FoundCRN(waitListAvalible=block.get("ws"), waitListMax=block.get("wc"),
-                                    maxSeats=block.get("os")):
+
+                        print("Scanning:|",crn.class_name,"|", crn.term,"|", block.get("CRN"))
+                        print(block)
+                        if FoundCRN(avalibleWaitList=block.get("avalibleWaitList"), maxWaitlist=block.get("maxWaitlist"),
+                                    availableSeats=block.get("availableSeats")):
+
+                            print(Fore.RED + "Found:  ","|", crn.class_name,"|", crn.term, "|", crn.CRN)
                             mass_email_phone(crn)
 
 
-# todo need to add, no waitlist but full seats, or waitlist but no seats.
 
-def FoundCRN(maxSeats, waitListAvalible, waitListMax):
-    if waitListMax > 0:
-        if waitListAvalible > 0:
+def FoundCRN(availableSeats, avalibleWaitList, maxWaitlist):
+    availableSeats = int(availableSeats)
+    avalibleWaitList = int(avalibleWaitList)
+    maxWaitlist = int(maxWaitlist)
+
+    if maxWaitlist > 0:
+        if avalibleWaitList > 0:
             return True
     else:
-        if maxSeats > 0:
+        if availableSeats > 0:
             return True
         else:
             return False
@@ -173,13 +184,15 @@ def send_email(name, crn, address):
     # check if there is a waitlist avabile
     # if there is a waitlist avalible send the email and clear the users
     # once the users are cleared start again.
+    print(address)
     message = Mail(
         from_email='abubakar.daud@mail.mcgill.ca',
         to_emails=address,
-        subject='CLASS FOUND ALERT',
-        html_content='<strong>' + "Class:" + name + "with CRN:" + crn + "has waitlist space avaliable"  '</strong>')
+        subject='Class found',
+        html_content="Class:" + str(name) + "with CRN:" + str(crn) + "has waitlist space avaliable")
     try:
-        sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
+        #sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
+        sg = SendGridAPIClient("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")
         response = sg.send(message)
         print(response.status_code)
         print(response.body)

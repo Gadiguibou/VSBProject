@@ -9,7 +9,7 @@ import re
 from django.shortcuts import redirect
 from .models import Users, CRN
 from django.core.exceptions import ValidationError
-
+from .VSBLogic import send_email
 
 # Create your views here.
 def index(request):
@@ -118,18 +118,20 @@ def classfinder(request, class_name, term):
 
 
 def blue(request):
-    print(" -/- Users to follow -/- \n\n")
-    for x in Users.objects.all():
-        print(str(x.email))
-        print(str(x.phone_number))
-        print(list(x.crn.all()))
-        print("-/- CRN to follow -/-")
+    #print(" -/- Users to follow -/- \n\n")
+    #for x in Users.objects.all():
+    #    print(str(x.email))
+    #    print(str(x.phone_number))
+    #    print(list(x.crn.all()))
+    #    print("-/- CRN to follow -/-")
 
-    for x in CRN.objects.all():
-        print(str(x) + "\n")
+    #for x in CRN.objects.all():
+    #    print(str(x) + "\n")
 
-    return HttpResponse("Hello, world, text 0v0 if you can see this blue. Hope you had a productive day")
+    #return HttpResponse("Hello, world, text 0v0 if you can see this blue. Hope you had a productive day")
 
+    send_email(address="abubakar.daud@mail.mcgill.ca", crn=12345, name="Comp 202")
+    return HttpResponse("works")
 
 def success(request):
     return HttpResponse("success!")

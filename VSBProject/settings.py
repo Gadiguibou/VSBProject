@@ -35,7 +35,7 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
-INSTALLED_APPS = [
+DJANGO_APPS = [
     'mainpage.apps.MainpageConfig',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -43,8 +43,15 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
-
 ]
+
+CUSTOM_APPS = [
+    'background_task',
+]
+
+INSTALLED_APPS = DJANGO_APPS + CUSTOM_APPS
+
+
 SITE_ID = 1
 
 
