@@ -9,7 +9,8 @@ import re
 from django.shortcuts import redirect
 from .models import Users, CRN
 from django.core.exceptions import ValidationError
-from .VSBLogic import send_email
+from .VSBLogic import send_email, FoundCRN
+
 
 # Create your views here.
 def index(request):
@@ -49,20 +50,20 @@ def index(request):
 
 
 def classfinder(request, class_name, term):
+    print("class name:", class_name)
+    print("term:", term)
+
     try:
         if request.method == "POST":
             CRN_Array = []
             email = request.POST.get("email", "")
             tel = request.POST.get("phone", "")
-            print("this is tel")
-            print(tel)
+
             if not Users.objects.filter(email=email).exists():
                 if tel != "":
                     tel = tel.replace(" ", "")
                     tel = tel.replace("-", "")
                     tel = "+1" + tel
-                    print("tel before:")
-                    print(tel)
 
                     current_user = Users(email=email, phone_number=tel)
 
@@ -78,15 +79,17 @@ def classfinder(request, class_name, term):
 
             current_user = Users.objects.get(email=email)
             for key in request.POST:
-                print(key)
+
                 if key == "email":
                     continue
                 if key == "phone":
                     continue
                 if key == "csrfmiddlewaretoken":
                     continue
+                if key == "None":
+                    continue
 
-                key = int(key)
+                key = re.sub("[^0-9]", "", key)
 
                 if CRN.objects.filter(CRN=key, term=term, class_name=class_name).exists():
 
@@ -118,20 +121,21 @@ def classfinder(request, class_name, term):
 
 
 def blue(request):
-    #print(" -/- Users to follow -/- \n\n")
-    #for x in Users.objects.all():
+    # print(" -/- Users to follow -/- \n\n")
+    # for x in Users.objects.all():
     #    print(str(x.email))
     #    print(str(x.phone_number))
     #    print(list(x.crn.all()))
     #    print("-/- CRN to follow -/-")
 
-    #for x in CRN.objects.all():
+    # for x in CRN.objects.all():
     #    print(str(x) + "\n")
 
-    #return HttpResponse("Hello, world, text 0v0 if you can see this blue. Hope you had a productive day")
+    # return HttpResponse("Hello, world, text 0v0 if you can see this blue. Hope you had a productive day")
 
     send_email(address="abubakar.daud@mail.mcgill.ca", crn=12345, name="Comp 202")
     return HttpResponse("works")
+
 
 def success(request):
     return HttpResponse("success!")

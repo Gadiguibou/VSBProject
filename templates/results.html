@@ -22,18 +22,21 @@
     <div>
         <p> CRN: {{ o.CRN }}</p>
         <p> Professor: {{  o.Professor }}</p>
-        <div> Class info<div>
-            <p>  WaitList seats: {{ o.Waitlist }} </p>
-            <p> Available seats: {{ o.availableSeats }}</p>
-            <p> </p>
 
-        </div>
         <div>
             {% for q in o.Classtime  %}
                 <div>{{ q }}</div>
             {% endfor %}
+        <div>
 
-        <input type="checkbox" name={{ o.CRN }} />
+        {% if o.available %}
+            <p> This class has seats / waitlist available</p>
+            <input type="checkbox" name={{ o.CRN }} />
+        {% else %}
+            <!-- <input type="checkbox" name={{ o.CRN }} /> -->
+
+        {% endif %}
+        </div>
 
         </div>
 
