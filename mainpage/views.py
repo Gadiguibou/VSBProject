@@ -10,6 +10,7 @@ from django.shortcuts import redirect
 from .models import Users, CRN
 from django.core.exceptions import ValidationError
 from .VSBLogic import send_email, FoundCRN
+from .forms import ContactForm
 
 
 # Create your views here.
@@ -135,6 +136,11 @@ def blue(request):
 
     send_email(address="abubakar.daud@mail.mcgill.ca", crn=12345, name="Comp 202")
     return HttpResponse("works")
+
+    def contact_view(request):
+        form = ContactForm()
+        context = {'form': form}
+        return render(request, 'contact/contact.html', context)
 
 
 def success(request):

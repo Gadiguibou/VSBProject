@@ -28,6 +28,20 @@ class Users(models.Model):
         return "[ " + self.email + "  " + str(self.phone_regex) + " ] \n\n"
 
 
+class Contact(models.Model):
+    email = models.EmailField()
+    message = models.TextField()
+    subject = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.email + "|" + self.subject
+
+
+
+
+
+
+
 class UserForm(ModelForm):
     class Meta:
         model = Users

@@ -14,6 +14,8 @@
 
 
     <link rel="stylesheet" href="{%  static "reset.css"  %}">
+    <link rel="stylesheet" href="{%  static "main.css"  %}">
+
     <link rel="stylesheet" href="{%  static "phone_number/intl-tel-input-17.0.0/build/css/intlTelInput.css"  %}">
     <script type='text/javascript' src='{% static "phone_number/intl-tel-input-17.0.0/build/js/intlTelInput.min.js" %}' ></script>
 
@@ -28,40 +30,56 @@
     <body>
 
     <header>
-    <div>
-    <div> Free Seat finder McGill </div>
-    <div>
-        <div> Donate </div>
-        <div> Check Courses </div>
-        <div> Contact </div>
+    <div id="toptab">
+    <div id="Main-title"> Free Seat Finder McGill </div>
+    <div id="tabunder">
+        <div class="table_element"> Donate </div>
+        <div class="table_element"> Contact </div>
     </div>
     </div>
     </header>
 
 
+
+    <div class="block">
     {% block content %}{% endblock content %}
+    </div>
+
+
+    <div class="block">
+        <div id="secondblock" class="blocktab">
+            <h2> Important Information </h2>
+            <ul>
+                <li> This site is <b>not</b> affiliated with McGill University </li>
+                <li>This site only sends a notification, it does not sign up for you </li>
+                <li>Does not work for courses that have speical resvered seats </li>
+                <li>Will always be <b>free</b>, I will never make a profit off this</li>
+                <li> Project is open source so please contribute on GitHub</li>
+            </ul>
+        </div>
 
 
 
 
+    </div>
 
-    <footer>
 
 
-        <div> made with love by Abu ❤️, donate on KoFi if this helped you out as the server costs tend to get pricey 😥 </div>
 
+    <div class="block">
+        <div id="blockfooter">
+        <div> Made with love by Abu ❤️, donate on KoFi if this helped you out as the server costs tend to get pricey </div>
         <div>
-            <div> © 2021 Abu bakar Daud </div>
 
+            <div> © 2021 Abu bakar Daud </div>
             <div>
                 <div> Twitter </div>
                 <div> KoFi</div>
                 <div> GitHub </div>
             </div>
         </div>
-
-
-    </footer>
+        </div>
+        </div>
 
     </body>
 </html>
