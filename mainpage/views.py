@@ -52,9 +52,6 @@ def index(request):
 
 
 def classfinder(request, class_name, term):
-    print("class name:", class_name)
-    print("term:", term)
-
     try:
         if request.method == "POST":
             CRN_Array = []
@@ -80,6 +77,7 @@ def classfinder(request, class_name, term):
                     return redirect("404")
 
             current_user = Users.objects.get(email=email)
+            CRNs = ""
             for key in request.POST:
 
                 if key == "email":
@@ -92,7 +90,7 @@ def classfinder(request, class_name, term):
                     continue
 
                 key = re.sub("[^0-9]", "", key)
-
+                CRNs = CRNs + " " + key
                 if CRN.objects.filter(CRN=key, term=term, class_name=class_name).exists():
 
                     current_user.crn.add(CRN.objects.get(CRN=key, term=term, class_name=class_name))
@@ -106,7 +104,9 @@ def classfinder(request, class_name, term):
                     current_user.full_clean()
                     current_user.save()
 
-            return redirect("success")
+            context = {"email": email, "class": class_name, "term": term, "CRNs": CRNs}
+
+            return redirect("success", context)
 
         else:
             try:
@@ -138,18 +138,19 @@ def blue(request):
     return HttpResponse("secert feature for Christina 0v0")
 
 
-
 def contact(request):
-        form = ContactForm()
-        context = {'form': form}
-        return render(request, 'contact/contact.html', context)
+    form = ContactForm()
+    context = {'form': form}
+    return render(request, 'contact/contact.html', context)
 
 
 def API(request):
     return HttpResponse("secert feature for Christina 0v0")
 
+
 def account(request):
     return HttpResponse("secert feature for Christina 0v0")
 
-def success(request):
-    return render(request, 'success.html')
+
+def success(request, context):
+    return render(request, 'success.html', context)
