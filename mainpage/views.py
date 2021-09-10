@@ -11,6 +11,7 @@ from .models import Users, CRN
 from django.core.exceptions import ValidationError
 from .VSBLogic import send_email, FoundCRN
 from .forms import ContactForm
+import django_heroku
 
 
 # Create your views here.
@@ -134,14 +135,23 @@ def blue(request):
 
     # return HttpResponse("Hello, world, text 0v0 if you can see this blue. Hope you had a productive day")
 
-    send_email(address="abubakar.daud@mail.mcgill.ca", crn=12345, name="Comp 202")
-    return HttpResponse("works")
+    return HttpResponse("secert feature for Christina 0v0")
 
-    def contact_view(request):
+
+
+def contact(request):
         form = ContactForm()
         context = {'form': form}
         return render(request, 'contact/contact.html', context)
 
 
+def API(request):
+    return HttpResponse("secert feature for Christina 0v0")
+
+def account(request):
+    return HttpResponse("secert feature for Christina 0v0")
+
+
+
 def success(request):
-    return HttpResponse("success!")
+    return redirect("success")

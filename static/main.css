@@ -1,5 +1,6 @@
 body html{
     height: 100%;
+    width: 100%;
 }
 
 b{
@@ -20,12 +21,13 @@ b{
     display: flex;
     flex-direction: row;
     font-size: 2em;
-    padding-right: 0.1em;
     padding-bottom: 5px;
-
-
+    flex-wrap: wrap;
 
 }
+
+
+
 
 .table_element{
     padding: 4px 12px;
@@ -219,4 +221,20 @@ justify-content: center;
     flex-direction: column;
     text-align: center;
 
+}
+#finalfooter{
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+
+}
+
+
+.headerlink{
+    color: white;
+     text-decoration: none;
+}
+
+.footerlink{
+    color:red
 }
