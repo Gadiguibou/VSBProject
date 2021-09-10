@@ -43,8 +43,8 @@ class selectedclass:
             print("CRN", CRN)
             print("BOOL",FoundCRN(availableSeats=os, maxWaitlist=wc, avalibleWaitList=ws))
             print("availableSeats", os)
-            print("availableSeats", wc)
-            print("availableSeats", ws)
+            print("maxWaitlist", wc)
+            print("avalibleWaitList", ws)
 
 
 
