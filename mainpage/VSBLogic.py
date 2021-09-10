@@ -39,6 +39,15 @@ class selectedclass:
             dict = {"CRN": CRN, "Professor": Professor, "Waitlist": Waitlist, "Notes": Notes, "Classtime": arrayofKeys,
                     "Type": Type, "Sec": Sec, "me": me, "availableSeats": os, "avalibleWaitList": ws, "maxWaitlist": wc,
                     "available": FoundCRN(availableSeats=os, maxWaitlist=wc, avalibleWaitList=ws)}
+
+            print("CRN", CRN)
+            print("BOOL",FoundCRN(availableSeats=os, maxWaitlist=wc, avalibleWaitList=ws))
+            print("availableSeats", os)
+            print("availableSeats", wc)
+            print("availableSeats", ws)
+
+
+
             self.array_blocks.append(dict)
 
     def to_dict(self):
@@ -164,6 +173,8 @@ def FoundCRN(availableSeats, avalibleWaitList, maxWaitlist):
     availableSeats = int(availableSeats)
     avalibleWaitList = int(avalibleWaitList)
     maxWaitlist = int(maxWaitlist)
+
+
     if maxWaitlist > 0:
         if avalibleWaitList > 0:
             return True
