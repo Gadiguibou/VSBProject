@@ -1,1 +1,2 @@
 web: gunicorn VSBProject.wsgi
+gunicorn VSBProject:application --preload -b 0.0.0.0:5000
