@@ -25,6 +25,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
+
+if SECRET_KEY is None:
+    SECRET_KEY = "coolsecertkey_abu_is_cool"
+
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 #hi
@@ -89,9 +94,9 @@ WSGI_APPLICATION = 'VSBProject.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': "django.db.backends.postgresql",
-        "HOST": "ec2-18-215-111-67.compute-1.amazonaws.com",
-        "NAME": "d4afi55t1co2ec",
-        "USER": "rodqhgjekqwril",
+        "HOST": "localhost",
+        "NAME": "adaud",
+        "USER": "",
         "PORT": "5432",
         "PASSWORD": ""
     }

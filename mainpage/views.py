@@ -12,6 +12,7 @@ from django.core.exceptions import ValidationError
 from .VSBLogic import send_email, FoundCRN
 from .forms import ContactForm
 import django_heroku
+from ratelimit.decorators import ratelimit
 
 
 # Create your views here.
@@ -51,6 +52,8 @@ def index(request):
     return render(request, 'index.html', {'form': form})
 
 
+
+@ratelimit(key="ip", rate='30/h', block=True)
 def classfinder(request, class_name, term):
     try:
         if request.method == "POST":
@@ -145,11 +148,37 @@ def contact(request):
 
 
 def API(request):
-    return HttpResponse("secert feature for Christina 0v0")
+    return render(request, "API.html")
+
+
+@ratelimit(key="ip", rate='10/m')
+def API_GET(request, slug, term):
+
+    if getattr(request, 'limited', False):
+        return JsonResponse(
+            {"error": 'too many requests, you are being rate limited'}, status=429)
+
+
+    try:
+        slug = slug.split("-")
+        subjectcode = slug[0]
+        subjectnumber = slug[1]
+
+        if not subjectnumber.isdecimal():
+            raise ArithmeticError
+
+        if not subjectcode.isalpha():
+            raise ArithmeticError
+    except:
+        return JsonResponse({ "error" : 'Bad request try entering correct subject code and title example "/API/2019/COMP-206"' }, status=400)
+
+    try:
+        class_value = get_class(slug, term).to_dict()
+    except:
+        return JsonResponse({"error": 'not found"'},status=404)
+
+    return JsonResponse(class_value,status=200)
 
 
 def account(request):
     return HttpResponse("secert feature for Christina 0v0")
-
-
-

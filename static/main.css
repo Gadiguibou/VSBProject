@@ -238,3 +238,74 @@ justify-content: center;
 .footerlink{
     color:red
 }
+
+
+
+h3{
+
+    font-size: 22px;
+    padding-bottom: 2px;
+
+}
+
+
+.API_block_unit{
+    padding-top: 10px;
+    padding-bottom: 10px;
+    background-color: #F8F8F8;
+}
+
+.API_block{
+    padding: 18px 8px;
+    margin: 2px 2px;
+    text-align: left;
+    text-indent: 8px;
+    letter-spacing: 2px;
+}
+
+#p-padding-top{
+
+    padding-top:6px
+}
+
+
+.codeline{
+    padding: 4px;
+
+    display: block;
+    color: #D8DEE9;
+    background-color: #434C5E;
+}
+
+code{
+    font-family: monospace;
+    padding: 10px 5px;
+    margin: 5px;
+    text-indent: 12px;
+    font-size: 18px
+
+}
+
+.indent{
+ text-indent: 48px;
+}
+
+.value{
+    color: #A3BE8C;
+}
+
+.valuebool{
+    color: #BF616A;
+}
+.valueint{
+    color:#D08770;
+}
+
+h3{
+    font-family: 'Helvetica', 'Arial', sans-serif;
+    font-size: 26px;
+    color: #1b1b1b;
+    padding-bottom: 4px;
+    padding-top: 3px;
+}
+

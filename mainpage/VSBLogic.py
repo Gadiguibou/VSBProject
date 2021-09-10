@@ -51,7 +51,7 @@ class selectedclass:
             self.array_blocks.append(dict)
 
     def to_dict(self):
-        return {"name": self.name, "discription": self.discription, "courseCode": self.courseCode,
+        return {"className": self.name, "classDescription": self.discription, "courseCode": self.courseCode,
                 "timeblocks": self.array_blocks, "term": self.term}
 
 
