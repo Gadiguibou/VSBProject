@@ -27,7 +27,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
+#hi
 ALLOWED_HOSTS = ['freeseatfinder.com', 'www.freeseatfinder.com']
 
 # Application definition
