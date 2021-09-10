@@ -36,23 +36,19 @@ class selectedclass:
             arrayofKeys = []
             for key in Classtime:
                 arrayofKeys.append(self.dictory_time_code.get(key, "NA"))
-            dict = {"CRN": CRN, "Professor": Professor, "Waitlist": Waitlist, "Notes": Notes, "Classtime": arrayofKeys,
-                    "Type": Type, "Sec": Sec, "me": me, "availableSeats": os, "avalibleWaitList": ws, "maxWaitlist": wc,
-                    "available": FoundCRN(availableSeats=os, maxWaitlist=wc, avalibleWaitList=ws)}
+            dict = {"crn": CRN, "instructor": Professor, "Waitlist": Waitlist, "Notes": Notes, "classTimes": arrayofKeys,
+                    "Type": Type, "Sec": Sec, "me": me, "numberAvailableSeats": os, "numberAvailableWaitList": ws,
+                    "numberMaxWaitList": wc,
+                    "seatsAvailable": FoundCRN(availableSeats=os, maxWaitlist=wc, avalibleWaitList=ws)}
 
-            print("CRN", CRN)
-            print("BOOL",FoundCRN(availableSeats=os, maxWaitlist=wc, avalibleWaitList=ws))
-            print("availableSeats", os)
-            print("maxWaitlist", wc)
-            print("avalibleWaitList", ws)
 
 
 
             self.array_blocks.append(dict)
 
     def to_dict(self):
-        return {"className": self.name, "classDescription": self.discription, "courseCode": self.courseCode,
-                "timeblocks": self.array_blocks, "term": self.term}
+        return {"classTitle": self.name, "classDescription": self.discription, "className": self.courseCode,
+                "timeBlock": self.array_blocks, "term": self.term, "crnArray": self.added_CRNs}
 
 
 def get_date():
@@ -153,15 +149,15 @@ def Scanner():
                 if (crn.class_name, crn.term) not in class_checked_array:
                     class_checked_array.append(crn)
                     scanning_CRN = get_class(crn.class_name, crn.term).to_dict()
-                    for block in scanning_CRN.get("timeblocks"):
-                        print("Scanning:|", crn.class_name, "|", crn.term, "|", block.get("CRN"))
+                    for block in scanning_CRN.get("timeBlock"):
+                        print("Scanning:|", crn.class_name, "|", crn.term, "|", block.get("crn"))
                         if block.get("available"):
                             if CRN.objects.filter(CRN=block.get("CRN"), term=crn.term).exists():
 
-                                final_crn = CRN.objects.get(CRN=block.get("CRN"), term=crn.term)
+                                final_crn = CRN.objects.get(CRN=block.get("crn"), term=crn.term)
                                 if Users.objects.filter(crn=final_crn):
                                     print(Fore.RED + "Found:  ", "|", crn.class_name, "|", crn.term, "|",
-                                          block.get("CRN"))
+                                          block.get("crn"))
                                     mass_email_phone(final_crn)
 
 

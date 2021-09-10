@@ -4,7 +4,7 @@
 {% extends "base_template.html" %}
 
 {% block content %}
-<form id="submit_form" action="/class/{{ term }}/{{ courseCode }}" method="post">{% csrf_token %}
+<form id="submit_form" action="/class/{{ term }}/{{ className }}" method="post">{% csrf_token %}
 
 
 
@@ -12,39 +12,38 @@
 <div>
 
     <div id="toptabcontact">
-        <h2>{{ name }}</h2>
-        <p id="coursecode"> Course Code: <b>{{ courseCode }}</b></p>
-        <p id="description">{{ discription }}</p>
+        <h2>{{ classTitle }}</h2>
+        <p id="coursecode"> Course Code: <b>{{ className }}</b></p>
+        <p id="description">{{ classDescription }}</p>
     </div>
 
 
 
-{% for o in timeblocks %}
+{% for o in timeBlock %}
     <div class="timeblock">
         <div class="CRNblock">
-        {% if o.available %}
-        <p> CRN: <b>{{ o.CRN }} </b> </p>
+        {% if o.seatsAvailable %}
+        <p> CRN: <b>{{ o.crn }} </b> </p>
 
 
 
         {% else %}
 
-            <p> CRN: <b>{{ o.CRN }} </b> </p>
-             <input class="checkboxtimeblock" type="checkbox" name={{ o.CRN }} />
-
+            <p> CRN: <b>{{ o.crn }} </b> </p>
+             <input class="checkboxtimeblock" type="checkbox" name={{ o.crn }} />
 
         {% endif %}
         </div>
 
-        <p> Professor: {{  o.Professor }}</p>
+        <p> Professor: {{  o.instructor }}</p>
 
         <div>
-            {% for q in o.Classtime  %}
+            {% for q in o.classTimes  %}
                 <div>{{ q }}</div>
             {% endfor %}
         <div>
 
-        {% if o.available %}
+        {% if o.seatsAvailable %}
             <p> This class has <b>available</b> seats, sign up on Minerva!</p>
 
             <!-- <input type="checkbox" name={{ o.CRN }} /> -->

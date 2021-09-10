@@ -118,7 +118,6 @@ def classfinder(request, class_name, term):
                 return render(request, 'fail.html', {"class": class_name, "term": term})
 
             return render(request, "results.html", class_value)
-        # if request.method == 'POST':
 
     except ValidationError as e:
         print(e)
