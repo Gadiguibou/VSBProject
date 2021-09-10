@@ -151,7 +151,5 @@ def API(request):
 def account(request):
     return HttpResponse("secert feature for Christina 0v0")
 
-
-
 def success(request):
-    return redirect("success")
+    return render(request, 'success.html')
