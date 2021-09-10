@@ -25,11 +25,13 @@
         {% if o.available %}
         <p> CRN: <b>{{ o.CRN }} </b> </p>
 
-            <input class="checkboxtimeblock" type="checkbox" name={{ o.CRN }} />
+
 
         {% else %}
 
             <p> CRN: <b>{{ o.CRN }} </b> </p>
+             <input class="checkboxtimeblock" type="checkbox" name={{ o.CRN }} />
+
 
         {% endif %}
         </div>
@@ -43,8 +45,6 @@
         <div>
 
         {% if o.available %}
-
-        {% else %}
             <p> This class has <b>available</b> seats, sign up on Minerva!</p>
 
             <!-- <input type="checkbox" name={{ o.CRN }} /> -->
