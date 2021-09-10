@@ -13,20 +13,11 @@ import os
 import dj_database_url
 import django_heroku
 from pathlib import Path
-import environ
 
-
-
-
-
-
-env = environ.Env()
-environ.Env.read_env()
 SENDGRID_API_KEY = os.environ.get("SENDGRID_API_KEY")
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
@@ -37,8 +28,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['freeseatfinder.com','www.freeseatfinder.com']
-
+ALLOWED_HOSTS = ['freeseatfinder.com', 'www.freeseatfinder.com']
 
 # Application definition
 
@@ -58,10 +48,7 @@ CUSTOM_APPS = [
 
 INSTALLED_APPS = DJANGO_APPS + CUSTOM_APPS
 
-
 SITE_ID = 1
-
-
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -96,19 +83,22 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'VSBProject.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DATABASES = {
     'default': {
         'ENGINE': "django.db.backends.postgresql",
+        "HOST": "ec2-18-215-111-67.compute-1.amazonaws.com",
+        "NAME": "d4afi55t1co2ec",
+        "USER": "rodqhgjekqwril",
+        "PORT": "5432",
+        "PASSWORD": ""
     }
 }
 
 db_from_env = dj_database_url.config(conn_max_age=600)
 DATABASES['default'].update(db_from_env)
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -128,9 +118,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
@@ -145,29 +133,24 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
-
-
 STATIC_URL = '/static/'
 
-#location where django collect all static files
-STATIC_ROOT = os.path.join(BASE_DIR,'static')
+# location where django collect all static files
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 # location where you will store your static files
-STATICFILES_DIRS = [os.path.join(BASE_DIR,'project_name/static')]
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'VSBProject/static')]
 
-MEDIA_ROOT = os.path.join(BASE_DIR,'media')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
-
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
 
 django_heroku.settings(locals())
