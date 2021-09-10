@@ -106,7 +106,7 @@ def classfinder(request, class_name, term):
 
             context = {"email": email, "class": class_name, "term": term, "CRNs": CRNs}
 
-            return redirect("success", context)
+            return render(request, 'success.html', context)
 
         else:
             try:
@@ -152,5 +152,4 @@ def account(request):
     return HttpResponse("secert feature for Christina 0v0")
 
 
-def success(request, context):
-    return render(request, 'success.html', context)
+
