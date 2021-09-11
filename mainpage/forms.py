@@ -15,4 +15,4 @@ class ContactForm(ModelForm):
     class Meta:
         model = Contact
         fields = '__all__'
-
+        field_order = [ "email", "subject", "message"]

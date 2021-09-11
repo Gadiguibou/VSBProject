@@ -13,6 +13,12 @@ from .VSBLogic import send_email, FoundCRN
 from .forms import ContactForm
 import django_heroku
 from ratelimit.decorators import ratelimit
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
+from VSBProject import settings
+import colorama
+from colorama import Fore, Back, Style
+colorama.init(autoreset=True)
 
 
 # Create your views here.
@@ -109,6 +115,9 @@ def classfinder(request, class_name, term):
 
             context = {"email": email, "class": class_name, "term": term, "CRNs": CRNs}
 
+            if CRNs == "":
+                return render(request, 'no_crn.html', context)
+
             return render(request, 'success.html', context)
 
         else:
@@ -141,9 +150,36 @@ def blue(request):
 
 
 def contact(request):
+    if request.method == 'POST':
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            form.save()
+
+            message = Mail(
+                from_email='abuiscrying@gmail.com',
+                to_emails="abubakar.daud@mail.mcgill.ca",
+                subject='CONTACT' + request.POST.get('subject'),
+                html_content=request.POST.get('message') + "\n\n" + "email:" + request.POST.get('email'))
+            try:
+                sg = SendGridAPIClient(settings.SENDGRID_API_KEY)
+                response = sg.send(message)
+                print(Fore.CYAN + "Contact Email: ", request.POST.get('email')," | ", request.POST.get('subject') )
+
+            except Exception as e:
+                print(e)
+
+
+
+
+            return render(request, 'contactsuccess.html')
+
+
+
     form = ContactForm()
     context = {'form': form}
-    return render(request, 'contact/contact.html', context)
+    return render(request, 'contact.html', context)
+
+
 
 
 def API(request):

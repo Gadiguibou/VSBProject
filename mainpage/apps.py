@@ -19,7 +19,7 @@ class MainpageConfig(AppConfig):
         from colorama import Fore, Back, Style
         colorama.init(autoreset=True)
         print(ASIC_text)
-        repeat_value = 15
+        repeat_value = 5
         print("Scanner will repeat every", Fore.RED + str(repeat_value), "seconds.", "\n\n\n")
 
-        #Scanner(repeat=repeat_value)
+        Scanner(repeat=repeat_value)
