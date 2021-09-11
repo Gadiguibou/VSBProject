@@ -142,7 +142,7 @@ def attrib_to_date(attrib_text):
 @background(schedule=5)
 def Scanner():
     while True:
-        time.sleep(5)
+        time.sleep(10)
         class_checked_array = []
         for user in list(Users.objects.all()):
             for crn in user.crn.all():
@@ -151,6 +151,7 @@ def Scanner():
                     scanning_CRN = get_class(crn.class_name, crn.term).to_dict()
                     for block in scanning_CRN.get("timeBlock"):
                         print("Scanning:|", crn.class_name, "|", crn.term, "|", block.get("crn"))
+                        time.sleep(1)
                         if block.get("available"):
                             if CRN.objects.filter(CRN=block.get("CRN"), term=crn.term).exists():
 
