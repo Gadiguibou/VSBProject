@@ -17,6 +17,25 @@ from VSBProject import settings
 colorama.init(autoreset=True)
 
 
+
+
+ASIC_text = """
+███████╗██████╗█████╗███╗   █████╗   ███████████████╗     ██╗     ██████╗ █████╗██████╗█████████████╗ 
+██╔════██╔════██╔══██████╗  ██████╗  ████╔════██╔══██╗    ██║    ██╔═══████╔══████╔══████╔════██╔══██╗
+█████████║    █████████╔██╗ ████╔██╗ ███████╗ ██████╔╝    ██║    ██║   ███████████║  ███████╗ ██║  ██║
+╚════████║    ██╔══████║╚██╗████║╚██╗████╔══╝ ██╔══██╗    ██║    ██║   ████╔══████║  ████╔══╝ ██║  ██║
+███████╚████████║  ████║ ╚██████║ ╚█████████████║  ██║    ███████╚██████╔██║  ████████╔█████████████╔╝
+╚══════╝╚═════╚═╝  ╚═╚═╝  ╚═══╚═╝  ╚═══╚══════╚═╝  ╚═╝    ╚══════╝╚═════╝╚═╝  ╚═╚═════╝╚══════╚═════╝                                                                                                     
+"""
+
+
+
+
+
+
+
+
+
 class selectedclass:
     def __init__(self, name, discription, courseCode, term):
         self.name = name
@@ -139,10 +158,9 @@ def attrib_to_date(attrib_text):
     return switcher.get(attrib_text, "NA")
 
 
-@background(schedule=5)
+@background(schedule=15)
 def Scanner():
-    while True:
-        time.sleep(10)
+        print("SCAN START")
         class_checked_array = []
         for user in list(Users.objects.all()):
             for crn in user.crn.all():

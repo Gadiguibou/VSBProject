@@ -1,13 +1,6 @@
 from django.apps import AppConfig
 
-ASIC_text = """
-███████╗██████╗█████╗███╗   █████╗   ███████████████╗     ██╗     ██████╗ █████╗██████╗█████████████╗ 
-██╔════██╔════██╔══██████╗  ██████╗  ████╔════██╔══██╗    ██║    ██╔═══████╔══████╔══████╔════██╔══██╗
-█████████║    █████████╔██╗ ████╔██╗ ███████╗ ██████╔╝    ██║    ██║   ███████████║  ███████╗ ██║  ██║
-╚════████║    ██╔══████║╚██╗████║╚██╗████╔══╝ ██╔══██╗    ██║    ██║   ████╔══████║  ████╔══╝ ██║  ██║
-███████╚████████║  ████║ ╚██████║ ╚█████████████║  ██║    ███████╚██████╔██║  ████████╔█████████████╔╝
-╚══════╝╚═════╚═╝  ╚═╚═╝  ╚═══╚═╝  ╚═══╚══════╚═╝  ╚═╝    ╚══════╝╚═════╝╚═╝  ╚═╚═════╝╚══════╚═════╝                                                                                                     
-"""
+
 
 
 class MainpageConfig(AppConfig):
@@ -18,8 +11,3 @@ class MainpageConfig(AppConfig):
         import colorama
         from colorama import Fore, Back, Style
         colorama.init(autoreset=True)
-        print(ASIC_text)
-        repeat_value = 15
-        print("Scanner will repeat every", Fore.RED + str(repeat_value), "seconds.", "\n\n\n")
-
-        Scanner(repeat=repeat_value)
