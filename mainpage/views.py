@@ -156,7 +156,7 @@ def contact(request):
             form.save()
 
             message = Mail(
-                from_email='abuiscrying@gmail.com',
+                from_email='support@freeseatfinder.com',
                 to_emails="abubakar.daud@mail.mcgill.ca",
                 subject='CONTACT' + request.POST.get('subject'),
                 html_content=request.POST.get('message') + "\n\n" + "email:" + request.POST.get('email'))

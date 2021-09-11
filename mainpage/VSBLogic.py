@@ -199,7 +199,7 @@ def send_email(name, crn, address):
     # once the users are cleared start again.
 
     message = Mail(
-        from_email='abuiscrying@gmail.com',
+        from_email='support@freeseatfinder.com',
         to_emails=address,
         subject='Class found',
         html_content="Class:" + str(name) + "with CRN:" + str(crn) + "has waitlist space avaliable")
