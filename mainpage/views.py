@@ -12,7 +12,6 @@ from django.core.exceptions import ValidationError
 from .VSBLogic import send_email, FoundCRN
 from .forms import ContactForm
 import django_heroku
-from ratelimit.decorators import ratelimit
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
 from VSBProject import settings
@@ -59,7 +58,7 @@ def index(request):
 
 
 
-@ratelimit(key="ip", rate='30/h', block=True)
+
 def classfinder(request, class_name, term):
     try:
         if request.method == "POST":
@@ -186,7 +185,7 @@ def API(request):
     return render(request, "API.html")
 
 
-@ratelimit(key="ip", rate='10/m')
+
 def API_GET(request, slug, term):
 
     if getattr(request, 'limited', False):
