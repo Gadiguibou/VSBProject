@@ -160,19 +160,18 @@ def attrib_to_date(attrib_text):
 
 @background(schedule=15)
 def Scanner():
-        print("SCAN START")
+        print(Fore.RED + "SCAN START")
         class_checked_array = []
         for user in list(Users.objects.all()):
             for crn in user.crn.all():
                 if (crn.class_name, crn.term) not in class_checked_array:
                     class_checked_array.append(crn)
                     scanning_CRN = get_class(crn.class_name, crn.term).to_dict()
+                    print("Scanning:|", crn.class_name, "|", crn.term, "|")
                     for block in scanning_CRN.get("timeBlock"):
-                        print("Scanning:|", crn.class_name, "|", crn.term, "|", block.get("crn"))
-                        time.sleep(1)
+                        time.sleep(0.5)
                         if block.get("available"):
                             if CRN.objects.filter(CRN=block.get("CRN"), term=crn.term).exists():
-
                                 final_crn = CRN.objects.get(CRN=block.get("crn"), term=crn.term)
                                 if Users.objects.filter(crn=final_crn):
                                     print(Fore.RED + "Found:  ", "|", crn.class_name, "|", crn.term, "|",
