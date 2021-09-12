@@ -14,10 +14,8 @@ from background_task import background
 import colorama
 from colorama import Fore, Back, Style
 from VSBProject import settings
+
 colorama.init(autoreset=True)
-
-
-
 
 ASIC_text = """
 ███████╗██████╗█████╗███╗   █████╗   ███████████████╗     ██╗     ██████╗ █████╗██████╗█████████████╗ 
@@ -27,13 +25,6 @@ ASIC_text = """
 ███████╚████████║  ████║ ╚██████║ ╚█████████████║  ██║    ███████╚██████╔██║  ████████╔█████████████╔╝
 ╚══════╝╚═════╚═╝  ╚═╚═╝  ╚═══╚═╝  ╚═══╚══════╚═╝  ╚═╝    ╚══════╝╚═════╝╚═╝  ╚═╚═════╝╚══════╚═════╝                                                                                                     
 """
-
-
-
-
-
-
-
 
 
 class selectedclass:
@@ -55,13 +46,11 @@ class selectedclass:
             arrayofKeys = []
             for key in Classtime:
                 arrayofKeys.append(self.dictory_time_code.get(key, "NA"))
-            dict = {"crn": CRN, "instructor": Professor, "Waitlist": Waitlist, "Notes": Notes, "classTimes": arrayofKeys,
+            dict = {"crn": CRN, "instructor": Professor, "Waitlist": Waitlist, "Notes": Notes,
+                    "classTimes": arrayofKeys,
                     "Type": Type, "Sec": Sec, "me": me, "numberAvailableSeats": os, "numberAvailableWaitList": ws,
                     "numberMaxWaitList": wc,
                     "seatsAvailable": FoundCRN(availableSeats=os, maxWaitlist=wc, avalibleWaitList=ws)}
-
-
-
 
             self.array_blocks.append(dict)
 
@@ -160,34 +149,29 @@ def attrib_to_date(attrib_text):
 
 @background(schedule=15)
 def Scanner():
-        print(Fore.RED + "SCAN START")
-        class_checked_array = []
-        for user in list(Users.objects.all()):
-            for crn in user.crn.all():
-                if (crn.class_name, crn.term) not in class_checked_array:
-                    class_checked_array.append( (crn.class_name, crn.term) )
-                    scanning_CRN = get_class(crn.class_name, crn.term).to_dict()
-                    print("Scanning:|", crn.class_name, "|", crn.term, "|")
-                    for block in scanning_CRN.get("timeBlock"):
-                        time.sleep(0.5)
-                        if block.get("available"):
-                            if CRN.objects.filter(CRN=block.get("CRN"), term=crn.term).exists():
-                                final_crn = CRN.objects.get(CRN=block.get("crn"), term=crn.term)
-                                if Users.objects.filter(crn=final_crn):
-                                    print(Fore.RED + "Found:  ", "|", crn.class_name, "|", crn.term, "|",
-                                          block.get("crn"))
-                                    mass_email_phone(final_crn)
-
-
-
-
+    print(Fore.RED + "SCAN START")
+    class_checked_array = []
+    for user in list(Users.objects.all()):
+        for crn in user.crn.all():
+            if (crn.class_name, crn.term) not in class_checked_array:
+                class_checked_array.append((crn.class_name, crn.term))
+                scanning_CRN = get_class(crn.class_name, crn.term).to_dict()
+                print("Scanning:|", crn.class_name, "|", crn.term, "|")
+                time.sleep(0.4)
+                for block in scanning_CRN.get("timeBlock"):
+                    if block.get("available"):
+                        if CRN.objects.filter(CRN=block.get("CRN"), term=crn.term).exists():
+                            final_crn = CRN.objects.get(CRN=block.get("crn"), term=crn.term)
+                            if Users.objects.filter(crn=final_crn):
+                                print(Fore.RED + "Found:  ", "|", crn.class_name, "|", crn.term, "|",
+                                      block.get("crn"))
+                                mass_email_phone(final_crn)
 
 
 def FoundCRN(availableSeats, avalibleWaitList, maxWaitlist):
     availableSeats = int(availableSeats)
     avalibleWaitList = int(avalibleWaitList)
     maxWaitlist = int(maxWaitlist)
-
 
     if maxWaitlist > 0:
         if avalibleWaitList > 0:
@@ -209,7 +193,6 @@ def mass_email_phone(crn):
     crn.delete()
 
 
-
 def send_email(name, crn, address):
     # loop through all of the possible classes,
     # check if there is a waitlist avabile
@@ -224,7 +207,7 @@ def send_email(name, crn, address):
     try:
         sg = SendGridAPIClient(settings.SENDGRID_API_KEY)
         response = sg.send(message)
-        print(Fore.CYAN + "Email:  ","| Status:", Fore.CYAN + str(response.status_code), "|", address)
+        print(Fore.CYAN + "Email:  ", "| Status:", Fore.CYAN + str(response.status_code), "|", address)
 
     except Exception as e:
         print(e)
