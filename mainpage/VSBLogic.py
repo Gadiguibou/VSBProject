@@ -157,7 +157,7 @@ def Scanner():
                 class_checked_array.append((crn.class_name, crn.term))
                 scanning_CRN = get_class(crn.class_name, crn.term).to_dict()
                 print("Scanning:|", crn.class_name, "|", crn.term, "|")
-                time.sleep(0.4)
+                time.sleep(0.3)
                 for block in scanning_CRN.get("timeBlock"):
                     if block.get("available"):
                         if CRN.objects.filter(CRN=block.get("CRN"), term=crn.term).exists():
