@@ -165,7 +165,7 @@ def Scanner():
         for user in list(Users.objects.all()):
             for crn in user.crn.all():
                 if (crn.class_name, crn.term) not in class_checked_array:
-                    class_checked_array.append(crn)
+                    class_checked_array.append( (crn.class_name, crn.term) )
                     scanning_CRN = get_class(crn.class_name, crn.term).to_dict()
                     print("Scanning:|", crn.class_name, "|", crn.term, "|")
                     for block in scanning_CRN.get("timeBlock"):
